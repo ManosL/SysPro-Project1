@@ -1,0 +1,110 @@
+Systems Programming Spring 2019-20
+Project 1
+
+Emmanouil Lykos - 1115201600096
+
+Section 1: Manual
+
+In order to compile this project you just write on the
+terminal the following command
+
+            make
+
+If you want to delete the object files and the executable
+write on the terminal the following command
+
+            make clean
+
+In order to execute the program write on the terminal the
+command
+
+        ./diseaseMonitor -p <patientRecordsFile> -h1 <diseaseHashtableNumOfEntries> 
+            -h2 <countryHashtableNumOfEntries> -b <bucketSize>
+
+where 
+    -> patientRecordsFile: The path to the file that contains the
+    initial records to give to the program.
+
+    -> diseaseHashtableNumOfEntries: The number of entries on the
+    disease hash table because this hash table will be static.
+    Should be greater than zero.
+
+    -> countryHashtableNumOfEntries: The number of entries on the
+    country hash table because this hash table will be static.
+    Should be greater than zero.
+
+    -> bucketSize: The size of each bucket(in bytes) of the 
+    aforementioned hash tables. Should be positive and greater
+    than a specific already defined value(for now is 125).
+
+and the parameters can be provided with different sequence
+but only once.
+
+Section 2: Data Structures
+
+The data structures and the modelling is pretty much like the
+schema of the project's but the following should be mentioned:
+
+    -> The balanced search tree was implemented by an AVL tree.
+    There is no particular serious reason about why I chose the
+    AVL tree instead of the Red-Black Tree. I mainly chose it
+    because this was the first data structure that came in my mind
+    and I think that everyone could chose either because they have the
+    same time complexity(O(log(n))) at insertions and searches.
+
+    -> In the AVL tree each node holds a list with pointers to records,
+    in order to not create new nodes in the tree with an existing entry
+    date, but instead each node will have all the records with this
+    particular entry date.
+
+    -> The max heap that was asked, was implemented with a tree and the
+    heap methods followed the traditional approach.
+
+    -> The records was saved on a linear hash table because every time
+    a new record cames we need to search if the record already exists,
+    therefore there is no better option than a linear hash table because
+    it does not uses unnecessary memory like a static hash table and has
+    average time complexity at searches and insertions equal with O(1) 
+    instead of a binary search tree that has O(log(n)) complexity on
+    these operations.
+
+Section 3: Implementation of commands and initialization
+
+    1) Initialization: In initialization I check if each
+    line is valid and if it is valid, I insert the record
+    in the records hash table, and I create the necessary
+    records in the diseaseHashTable and countryHashTable.
+
+    2) /globalDiseaseStats: In this command I traverse
+    the diseaseHashTable and for each record(which represents
+    a disease) I traverse the AVL tree in order to count the
+    number of patients(through the list of avl node) that are recorded
+    in the system in [date1, date2]* or all time if the dates are not
+    provided.
+
+    3) /diseaseFrequency: In this command I search the record in diseaseHashTable 
+    that represents the disease provided by the user and I count the patients
+    in the AVL tree that are recorded in [date1,date2] and are from the country
+    provided, if provided, else I count the patients that are recorded in
+    [date1, date2].
+
+    4) /topK-Diseases: 
+
+    5) /topK-Countries:
+
+    6) /insertPatientRecord: I do pretty much the same things as the
+    initialization but for just one line.
+
+    7) /recordPatientExit: In this command I search for the record
+    with the id provided and if the new exit date is valid and greater
+    than record's entry date I change the exit date and I inform the
+    user about that.
+
+    8) /numCurrentPatients: This command I handle it like /globalDiseaseStats
+    (if the user does not give a disease) and /diseaseFrequency without country
+    (if the user gave a disease) but the two dates provided are equal with the
+    current date. 
+
+* A patient considered recorded in [date1, date2] if patient's Entry Date
+is in [date1,date2] or ptient's Exit Date is in [date1, date2] or [date1,date2]
+is a subset of [patient's entry date, patient's exit date].
