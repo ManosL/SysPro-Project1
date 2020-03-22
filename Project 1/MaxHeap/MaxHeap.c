@@ -94,7 +94,7 @@ int heap_tree_height(MaxHeapNode* curr_node){
 }
 
 // finding the node that the new value will be his child
-MaxHeapNode* MaxHeap_toAddNode(MaxHeapNode* curr_node, int curr_height){    // it's a helper
+MaxHeapNode* MaxHeap_toAddNode(MaxHeapNode* curr_node){    // it's a helper
     if(curr_node == NULL){
         return NULL;
     }
@@ -107,15 +107,19 @@ MaxHeapNode* MaxHeap_toAddNode(MaxHeapNode* curr_node, int curr_height){    // i
         return curr_node;
     }
 
+    int curr_tree_height = heap_tree_height(curr_node);
+    int left_subtree_height  = heap_tree_height(curr_node->left_child);
+    int right_subtree_height = heap_tree_height(curr_node->right_child);
+
     // if the left subtree has greater height than the right subtree then
     if(heap_tree_height(curr_node->left_child) > heap_tree_height(curr_node->right_child)){
         // if the left subtree is complete then I should add it in the right subtree
         //  because it does not have space on  the last level to put the new node
-        if(tree_count_nodes_on_level(curr_node->left_child, curr_height - 1) == power(2, curr_height - 1)){
-            return MaxHeap_toAddNode(curr_node->right_child, curr_height - 1);
+        if(tree_count_nodes_on_level(curr_node->left_child, left_subtree_height) == power(2, left_subtree_height)){
+            return MaxHeap_toAddNode(curr_node->right_child);
         }
         else{               // else we go to the left subtree
-            return MaxHeap_toAddNode(curr_node->left_child, curr_height - 1);
+            return MaxHeap_toAddNode(curr_node->left_child);
         }
     }
 
@@ -123,23 +127,24 @@ MaxHeapNode* MaxHeap_toAddNode(MaxHeapNode* curr_node, int curr_height){    // i
     // is complete in order to determine if the last level have space
     // for an extra node. If it doesn't I just put the new node on
     // another level 
-    if(heap_tree_height(curr_node->left_child) == heap_tree_height(curr_node->right_child)){
-        if(tree_count_nodes_on_level(curr_node, curr_height) == power(2, curr_height)){
-            return MaxHeap_toAddNode(curr_node->left_child, curr_height - 1);
+    if(left_subtree_height == right_subtree_height){
+        if(tree_count_nodes_on_level(curr_node, curr_tree_height) == power(2, curr_tree_height)){
+            return MaxHeap_toAddNode(curr_node->left_child);
         }
         else{
-            return MaxHeap_toAddNode(curr_node->right_child, curr_height - 1);
+            return MaxHeap_toAddNode(curr_node->right_child);
         }        
     } 
     else{
-        printf("Should not have happened\n");
+        printf("%d %d\n",heap_tree_height(curr_node->left_child),heap_tree_height(curr_node->right_child));
+        printf("Should not have happened(find toAdd)\n");
     }
 
     return NULL;   
 }
 
 // Finding the last node on the heap(the outmost right on the last level)
-MaxHeapNode* MaxHeap_findLastNode(MaxHeapNode* curr_node, int curr_height){    // it's a helper
+MaxHeapNode* MaxHeap_findLastNode(MaxHeapNode* curr_node){    // it's a helper
     if(curr_node == NULL){
         return NULL;
     }
@@ -148,15 +153,18 @@ MaxHeapNode* MaxHeap_findLastNode(MaxHeapNode* curr_node, int curr_height){    /
         return curr_node;
     }
 
-    if(heap_tree_height(curr_node->left_child) > heap_tree_height(curr_node->right_child)){
-        return MaxHeap_findLastNode(curr_node->left_child, curr_height - 1);
+    int left_subtree_height  = heap_tree_height(curr_node->left_child);
+    int right_subtree_height = heap_tree_height(curr_node->right_child);
+
+    if(left_subtree_height > right_subtree_height){
+        return MaxHeap_findLastNode(curr_node->left_child);
     }
 
-    if(heap_tree_height(curr_node->left_child) == heap_tree_height(curr_node->right_child)){
-        return MaxHeap_findLastNode(curr_node->right_child, curr_height - 1);    
+    if(left_subtree_height == right_subtree_height){
+        return MaxHeap_findLastNode(curr_node->right_child);    
     } 
     else{
-        printf("Should not have happened\n");
+        printf("Should not have happened(find last)\n");
     }
 
     return NULL;   
@@ -186,7 +194,7 @@ void MaxHeap_Insert(MaxHeapPtr heapPtr, char* name, int val){
     heapPtr->size += 1;
 
     // I find the parent of the new node
-    MaxHeapNode* curr_node = MaxHeap_toAddNode(heapPtr->root, heap_tree_height(heapPtr->root));
+    MaxHeapNode* curr_node = MaxHeap_toAddNode(heapPtr->root);
     MaxHeapNode* new_child = NULL;
 
     // I determine which child of that node will be
@@ -268,7 +276,7 @@ HeapRecord MaxHeap_popMax(MaxHeapPtr heapPtr){
 
     // Because I delete the root I need to replace the root value
     // with the value of the last node
-    MaxHeapNode* last_node = MaxHeap_findLastNode(heapPtr->root, heap_tree_height(heapPtr->root));
+    MaxHeapNode* last_node = MaxHeap_findLastNode(heapPtr->root);
 
     if(heapPtr->root == last_node){
         free(heapPtr->root);

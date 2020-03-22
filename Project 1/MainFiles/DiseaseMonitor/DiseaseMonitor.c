@@ -262,7 +262,7 @@ void DiseaseMonitor_diseaseFrequency(DiseaseMonitorPtr diseaseMonitor, char* cmd
     }
 
     // Checking that the disease that the user gave exists in the diseaseHashTable
-    if(!StaticHashTable_Exists(diseaseMonitor->diseaseHashTable, disease)){
+    if(!StaticHashTable_Exists(diseaseMonitor->diseaseHashTable, String_lowercase(disease))){
         printf("Disease %s does not have any outbreaks.\n", disease);
         return;
     }
@@ -333,7 +333,7 @@ void DiseaseMonitor_topKDiseases(DiseaseMonitorPtr diseaseMonitor, char* cmd_lin
     }
 
     // Checking if the country provided has any records.
-    if(!StaticHashTable_Exists(diseaseMonitor->countryHashTable, country)){
+    if(!StaticHashTable_Exists(diseaseMonitor->countryHashTable, String_lowercase(country))){
         printf("Country %s does not have any outbreaks.\n", country);
         return;
     }
@@ -402,7 +402,7 @@ void DiseaseMonitor_topKCountries(DiseaseMonitorPtr diseaseMonitor, char* cmd_li
         return;
     }
 
-    if(!StaticHashTable_Exists(diseaseMonitor->diseaseHashTable, disease)){
+    if(!StaticHashTable_Exists(diseaseMonitor->diseaseHashTable, String_lowercase(disease))){
         printf("Disease %s does not have any outbreaks.\n", disease);
         return;
     }
