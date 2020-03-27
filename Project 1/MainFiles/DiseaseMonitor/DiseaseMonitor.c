@@ -147,18 +147,22 @@ void DiseaseMonitor_Run(DiseaseMonitorPtr diseaseMonitor){
     while(1){
         line = NULL;
         line_len = 0;
-
+        int yolo = 0;
         // reading user's command
-        printf(">");
-        getline(&line,&line_len,stdin);
+        //printf(">");
+        int res = getline(&line,&line_len,stdin);
 
+        if(res == -1){
+            return;
+        }
+        
         line = String_removeWhitespaceSuffix(line);
 
         char* temp_line = malloc((strlen(line) + 1) * sizeof(char));
         strcpy(temp_line,line);
         
         char* command = strtok(line, " ");
-        
+
         // Checking the first token that is the command and I call the
         // necessary helper function
 
@@ -185,7 +189,7 @@ void DiseaseMonitor_Run(DiseaseMonitorPtr diseaseMonitor){
             //printf("Unknown command %s\n",command);
             printf("error\n");
         }
-
+        
         free(line);
         free(temp_line);
     }
