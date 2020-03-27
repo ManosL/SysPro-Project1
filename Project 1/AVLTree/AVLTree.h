@@ -9,6 +9,7 @@ void AVLTree_Create(AVLTreePtr*);
 int AVLTree_Height(AVLTreePtr);
 void AVLTree_Insert(AVLTreePtr,Record*); // I dont need to write delete function
 int AVLTree_diseaseFrequency(AVLTreePtr,char*,Date,Date);
+int AVLTree_CurrentPatients(AVLTreePtr,Date);
 void AVLTree_setDiseaseHeap(AVLTreePtr,Date,Date,MaxHeapPtr);
 void AVLTree_setCountryHeap(AVLTreePtr,Date,Date,MaxHeapPtr);
 void AVLTree_Destroy(AVLTreePtr*);

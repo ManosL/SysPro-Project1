@@ -149,13 +149,44 @@ void BucketList_diseaseFrequency(BucketListPtr bucketList,char* disease, char* c
                 curr_result = AVLTree_diseaseFrequency(curr_bucket->bucket_records[i].patient_records, 
                                                     NULL, start, end);
                 
-                printf("%s: %d outbreaks\n",curr_bucket->bucket_records[i].ID,curr_result);
+                //printf("%s: %d outbreaks\n",curr_bucket->bucket_records[i].ID,curr_result);
+                printf("%s %d\n",curr_bucket->bucket_records[i].ID,curr_result);
             }
             else if(!strcmp(curr_bucket->bucket_records[i].ID, disease)){
                 curr_result = AVLTree_diseaseFrequency(curr_bucket->bucket_records[i].patient_records, 
                                                     country, start, end);
                 
-                printf("%s: %d outbreaks\n",disease,curr_result);
+                //printf("%s: %d outbreaks\n",disease,curr_result);
+                printf("%s %d\n",disease,curr_result);
+            }
+        }
+
+        curr_bucket = curr_bucket->next;
+    }
+}
+
+void BucketList_currentPatients(BucketListPtr bucketList,char* disease, Date start){
+    Bucket* curr_bucket = bucketList->head;
+    int curr_result;
+
+    // calls the AVL Tree function that will give us the disease frequency in a specific
+    //country and date(if these are provided, if not country == NULL and the day of date
+    // structures will be -1) of a disease or for all diseases(if disease == NULL).
+    while(curr_bucket != NULL){
+        for(int i = 0; i < curr_bucket->curr_size; i++){
+            if(disease == NULL){
+                curr_result = AVLTree_CurrentPatients(curr_bucket->bucket_records[i].patient_records, 
+                                                    start);
+                
+                //printf("%s: %d outbreaks\n",curr_bucket->bucket_records[i].ID,curr_result);
+                printf("%s %d\n",curr_bucket->bucket_records[i].ID,curr_result);
+            }
+            else if(!strcmp(curr_bucket->bucket_records[i].ID, disease)){
+                curr_result = AVLTree_CurrentPatients(curr_bucket->bucket_records[i].patient_records, 
+                                                    start);
+                
+                //printf("%s: %d outbreaks\n",disease,curr_result);
+                printf("%s %d\n",disease,curr_result);
             }
         }
 

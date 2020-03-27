@@ -101,7 +101,7 @@ int  DiseaseMonitor_InitializeData(DiseaseMonitorPtr diseaseMonitor, FILE* recor
             else if(!String_onlyLetters(lastName, -1)){
                 printf("Line %d: Last Name should contain only letters(line will be ignored)\n", record_counter);
             }
-            else if((!String_onlyLettersAndNums(diseaseID,'-')) || (String_howManyOf(diseaseID,'-') > 1)){
+            else if((!String_onlyLettersAndNums(diseaseID,'-')) || (String_howManyOf(diseaseID,'-') > 2)){
                 printf("Line %d: Disease ID should contain only letters, numbers and at least\none dash(line will be ignored)\n",record_counter);
             }
             else if(!String_onlyLetters(country, -1)){
@@ -177,11 +177,13 @@ void DiseaseMonitor_Run(DiseaseMonitorPtr diseaseMonitor){
         }else if(!strcmp(command,"/numCurrentPatients")){
             DiseaseMonitor_numCurrentPatients(diseaseMonitor, temp_line);
         }else if(strcmp(line,"/exit") == 0){
+            printf("exiting\n");
             free(line);
             free(temp_line);
             return;
         }else{
-            printf("Unknown command %s\n",command);
+            //printf("Unknown command %s\n",command);
+            printf("error\n");
         }
 
         free(line);
@@ -199,12 +201,14 @@ void DiseaseMonitor_globalDiseaseStats(DiseaseMonitorPtr diseaseMonitor, char* c
 
     // Checking the num of arguments given
     if(strtok(NULL," ") != NULL){
-        printf("Usage: /globalDiseaseStats [date1 date2]\n");
+        //printf("Usage: /globalDiseaseStats [date1 date2]\n");
+        printf("error\n");
         return;
     }
 
     if(date1_str != NULL && date2_str == NULL){
-        printf("globalDiseaseStats: When you are giving starting date you should give end date.\nToo many arguments.\n");
+        //printf("globalDiseaseStats: When you are giving starting date you should give end date.\nToo many arguments.\n");
+        printf("error\n");
         return;
     }
 
@@ -219,17 +223,20 @@ void DiseaseMonitor_globalDiseaseStats(DiseaseMonitorPtr diseaseMonitor, char* c
         // Checking if the user gave valid dates and start day is indeed before end date
         // and if it is it calls the necessary function
         if(date1.day == -1){
-            printf("globalDiseaseStats: Start date has invalid date or format(should be DD-MM-YYYY)\n");
+            //printf("globalDiseaseStats: Start date has invalid date or format(should be DD-MM-YYYY)\n");
+            printf("error\n");
             return;
         }
 
         if(date2.day == -1){
-            printf("globalDiseaseStats: End date has invalid date or format(should be DD-MM-YYYY)\n");
+            //printf("globalDiseaseStats: End date has invalid date or format(should be DD-MM-YYYY)\n");
+            printf("error\n");
             return;
         }
 
         if(Date_isGreater(date1, date2)){
-            printf("globalDiseaseStats: Start date should be before end date\n");
+            //printf("globalDiseaseStats: Start date should be before end date\n");
+            printf("error\n");
             return;
         }
 
@@ -252,18 +259,21 @@ void DiseaseMonitor_diseaseFrequency(DiseaseMonitorPtr diseaseMonitor, char* cmd
 
     // Checking the number of arguments provided
     if(date2_str == NULL){
-        printf("Usage: /diseaseFrequency disease date1 date2 [country]\n");
+        //printf("Usage: /diseaseFrequency disease date1 date2 [country]\n");
+        printf("error\n");
         return;
     }
 
     if(strtok(NULL, " ") != NULL){
-        printf("Usage: /diseaseFrequency disease date1 date2 [country]\nToo many arguments.\n");
+        //printf("Usage: /diseaseFrequency disease date1 date2 [country]\nToo many arguments.\n");
+        printf("error\n");
         return;
     }
 
     // Checking that the disease that the user gave exists in the diseaseHashTable
     if(!StaticHashTable_Exists(diseaseMonitor->diseaseHashTable, String_lowercase(disease))){
-        printf("Disease %s does not have any outbreaks.\n", disease);
+        //printf("Disease %s does not have any outbreaks.\n", disease);
+        printf("error\n");
         return;
     }
 
@@ -272,17 +282,20 @@ void DiseaseMonitor_diseaseFrequency(DiseaseMonitorPtr diseaseMonitor, char* cmd
     Date end   = Date_fromStr(date2_str);
 
     if(start.day == -1){
-        printf("diseaseFrequency: Start date has invalid date or format(should be DD-MM-YYYY)\n");
+        //printf("diseaseFrequency: Start date has invalid date or format(should be DD-MM-YYYY)\n");
+        printf("error\n");
         return;
     }
 
     if(end.day == -1){
-        printf("diseaseFrequency: End date has invalid date or format(should be DD-MM-YYYY)\n");
+        //printf("diseaseFrequency: End date has invalid date or format(should be DD-MM-YYYY)\n");
+        printf("error\n");
         return;
     }
 
     if(Date_isGreater(start, end)){
-        printf("diseaseFrequency: Start date should be before end date\n");
+        //printf("diseaseFrequency: Start date should be before end date\n");
+        printf("error\n");
         return;
     }
 
@@ -310,31 +323,36 @@ void DiseaseMonitor_topKDiseases(DiseaseMonitorPtr diseaseMonitor, char* cmd_lin
 
     // Checking the number of arguments provided
     if(country == NULL){
-        printf("Usage: /topk-Diseases k country [date1 date2]\n");
+        //printf("Usage: /topk-Diseases k country [date1 date2]\n");
+        printf("error\n");
         return;
     }
 
     if(strtok(NULL, " ") != NULL){
-        printf("Usage: /topk-Diseases k country [date1 date2]\nToo many arguments.\n");
+        //printf("Usage: /topk-Diseases k country [date1 date2]\nToo many arguments.\n");
+        printf("error\n");
         return;
     }
 
     // Checking if the arguments satisfy the requirements
     if(date1_str != NULL && date2_str == NULL){
-        printf("topk-Diseases: when you provide start date you should provide end date.\n");
+        //printf("topk-Diseases: when you provide start date you should provide end date.\n");
+        printf("error\n");
         return;
     }
 
     int k = atoi(k_str);
 
     if(k <= 0){
-        printf("topk-Diseases: k is invalid or you should give a number greater than zero.\n");
+        //printf("topk-Diseases: k is invalid or you should give a number greater than zero.\n");
+        printf("error\n");
         return;
     }
 
     // Checking if the country provided has any records.
     if(!StaticHashTable_Exists(diseaseMonitor->countryHashTable, String_lowercase(country))){
-        printf("Country %s does not have any outbreaks.\n", country);
+        //printf("Country %s does not have any outbreaks.\n", country);
+        printf("error\n");
         return;
     }
 
@@ -349,17 +367,20 @@ void DiseaseMonitor_topKDiseases(DiseaseMonitorPtr diseaseMonitor, char* cmd_lin
         end   = Date_fromStr(date2_str);
 
         if(start.day == -1){
-            printf("topk-Diseases: Start date has invalid date or format(should be DD-MM-YYYY)\n");
+            //printf("topk-Diseases: Start date has invalid date or format(should be DD-MM-YYYY)\n");
+            printf("error\n");
             return;
         }
 
         if(end.day == -1){
-            printf("topk-Diseases: End date has invalid date or format(should be DD-MM-YYYY)\n");
+            //printf("topk-Diseases: End date has invalid date or format(should be DD-MM-YYYY)\n");
+            printf("error\n");
             return;
         }
 
         if(Date_isGreater(start,end)){
-            printf("topk-Diseases: Start date should be before end date.\n");
+            //printf("topk-Diseases: Start date should be before end date.\n");
+            printf("error\n");
             return;
         }
     }
@@ -381,29 +402,34 @@ void DiseaseMonitor_topKCountries(DiseaseMonitorPtr diseaseMonitor, char* cmd_li
     assert(!strcmp(command,"/topk-Countries"));
 
     if(disease == NULL){
-        printf("Usage: /topk-Countries k disease [date1 date2]\n");
+        //printf("Usage: /topk-Countries k disease [date1 date2]\n");
+        printf("error\n");
         return;
     }
 
     if(strtok(NULL, " ") != NULL){
-        printf("Usage: /topk-Countries k disease [date1 date2]\nToo many arguments.\n");
+        //printf("Usage: /topk-Countries k disease [date1 date2]\nToo many arguments.\n");
+        printf("error\n");
         return;
     }
 
     if(date1_str != NULL && date2_str == NULL){
-        printf("topk-Countries: when you provide start date you should provide end date.\n");
+        //printf("topk-Countries: when you provide start date you should provide end date.\n");
+        printf("error\n");
         return;
     }
 
     int k = atoi(k_str);
 
     if(k <= 0){
-        printf("topk-Countries: k is invalid or you should give a number greater than zero.\n");
+        //printf("topk-Countries: k is invalid or you should give a number greater than zero.\n");
+        printf("error\n");
         return;
     }
 
     if(!StaticHashTable_Exists(diseaseMonitor->diseaseHashTable, String_lowercase(disease))){
-        printf("Disease %s does not have any outbreaks.\n", disease);
+        //printf("Disease %s does not have any outbreaks.\n", disease);
+        printf("error\n");
         return;
     }
 
@@ -417,17 +443,20 @@ void DiseaseMonitor_topKCountries(DiseaseMonitorPtr diseaseMonitor, char* cmd_li
         end   = Date_fromStr(date2_str);
 
         if(start.day == -1){
-            printf("topk-Countries: Start date has invalid date or format(should be DD-MM-YYYY)\n");
+            //printf("topk-Countries: Start date has invalid date or format(should be DD-MM-YYYY)\n");
+            printf("error\n");
             return;
         }
 
         if(end.day == -1){
-            printf("topk-Countries: End date has invalid date or format(should be DD-MM-YYYY)\n");
+            //printf("topk-Countries: End date has invalid date or format(should be DD-MM-YYYY)\n");
+            printf("error\n");
             return;
         }
 
         if(Date_isGreater(start,end)){
-            printf("topk-Countries: Start date should be before end date.\n");
+            //printf("topk-Countries: Start date should be before end date.\n");
+            printf("error\n");
             return;
         }
     }
@@ -454,39 +483,49 @@ void DiseaseMonitor_InsertPatient(DiseaseMonitorPtr diseaseMonitor, char* cmd_li
 
     // Checking the number of the arguments provided
     if(strtok(NULL," ") != NULL){
-        printf("Usage: /insertPatientRecord recordID patientFirstName patientLastName diseaseID entryDate [exitDate]\n");
+        //printf("Usage: /insertPatientRecord recordID patientFirstName patientLastName diseaseID entryDate [exitDate]\n");
+        printf("error\n");
     }
     else if(entryDate_str == NULL){
-        printf("Usage: /insertPatientRecord recordID patientFirstName patientLastName diseaseID entryDate [exitDate]\n");
+        //printf("Usage: /insertPatientRecord recordID patientFirstName patientLastName diseaseID entryDate [exitDate]\n");
+        printf("error\n");
     } else{
         // Checking if the input record's ID already exists.
         if(RecordsHashTable_Search(diseaseMonitor->recordsSet, recordID) != NULL){
-            printf("insertPatientRecord: Record ID %s already exists.\n", recordID);
+            //printf("insertPatientRecord: Record ID %s already exists.\n", recordID);
+            printf("error\n");
             return;
         }
 
         // Checking if the strings provided are valid and if the date strings
         // are valid.
         if(!String_onlyLetters(firstName, -1)){
-            printf("insertPatientRecord: First Name should contain only letters\n");
+            //printf("insertPatientRecord: First Name should contain only letters\n");
+            printf("error\n");
         }
         else if(!String_onlyLetters(lastName, -1)){
-            printf("insertPatientRecord: Last Name should contain only letters\n");
+            //printf("insertPatientRecord: Last Name should contain only letters\n");
+            printf("error\n");
         }
-        else if((!String_onlyLettersAndNums(diseaseID,'-')) || (String_howManyOf(diseaseID,'-') > 1)){
-            printf("insertPatientRecord: Disease ID should contain only letters, numbers and at least\none dash\n");
+        else if((!String_onlyLettersAndNums(diseaseID,'-')) || (String_howManyOf(diseaseID,'-') > 2)){
+            //printf("insertPatientRecord: Disease ID should contain only letters, numbers and at least\none dash\n");
+            printf("error\n");
         }
         else if(!String_onlyLetters(country, -1)){
-            printf("insertPatientRecord: Country should contain only letters\n");
+            //printf("insertPatientRecord: Country should contain only letters\n");
+            printf("error\n");
         } 
         else if((entryDate = Date_fromStr(entryDate_str)).day == -1){
-            printf("insertPatientRecord: Invalid Date or invalid date format\n");
+            //printf("insertPatientRecord: Invalid Date or invalid date format\n");
+            printf("error\n");
         } 
         else if((exitDate = Date_fromStr(exitDate_str)).day == -1 && (exitDate_str != NULL)){
-            printf("insertPatientRecord: Invalid Date or invalid date format\n");
+            //printf("insertPatientRecord: Invalid Date or invalid date format\n");
+            printf("error\n");
         }
         else if(Date_isGreater(entryDate, exitDate) && (exitDate_str != NULL)){
-            printf("insertPatientRecord: Entry date should be before exit date\n");
+            //printf("insertPatientRecord: Entry date should be before exit date\n");
+            printf("error\n");
         }
         else{   // If everything is ok I insert the record in the records hash table and I configure properly
                 // the other disease monitor's data structures.
@@ -497,6 +536,8 @@ void DiseaseMonitor_InsertPatient(DiseaseMonitorPtr diseaseMonitor, char* cmd_li
             RecordsHashTable_Insert(diseaseMonitor->recordsSet, recordID, record);
             StaticHashTable_Insert(diseaseMonitor->diseaseHashTable, record->diseaseID, record);
             StaticHashTable_Insert(diseaseMonitor->countryHashTable, record->country, record);
+
+            printf("Record added\n");
         }
     }
 
@@ -515,18 +556,21 @@ void DiseaseMonitor_RecordPatientExit(DiseaseMonitorPtr diseaseMonitor, char* cm
 
     // Checking the number of the arguments provided.
     if(newDate_str == NULL){
-        printf("Usage: /recordPatientExit recordID exitDate\n");
+        //printf("Usage: /recordPatientExit recordID exitDate\n");
+        printf("error\n");
         return;
     }
 
     if(strtok(NULL, " ") != NULL){
-        printf("Usage: /recordPatientExit recordID exitDate\n");
+        //printf("Usage: /recordPatientExit recordID exitDate\n");
+        printf("error\n");
         return;        
     }
 
     // Checking if the record with that ID exists
     if((curr_rec = RecordsHashTable_Search(diseaseMonitor->recordsSet, recordID)) == NULL){
-        printf("recordPatientExit: Record ID %s does not exist.\n", recordID);
+        //printf("recordPatientExit: Record ID %s does not exist.\n", recordID);
+        printf("Not found\n");
         return;
     }
 
@@ -534,13 +578,15 @@ void DiseaseMonitor_RecordPatientExit(DiseaseMonitorPtr diseaseMonitor, char* cm
 
     // checking the validity of the date given in order to convert the string
     if(new_date.day == -1){
-        printf("recordPatientExit: Invalid Date or invalid date format\n");
+        //printf("recordPatientExit: Invalid Date or invalid date format\n");
+        printf("error\n");
         return;
     }
 
     // checking if new exit date is greater than the record's entry date.
     if(Date_isGreater(curr_rec->entry_date, new_date)){
-        printf("recordPatientExit: New exit date cannot be before than record's entry date\n");
+        //printf("recordPatientExit: New exit date cannot be before than record's entry date\n");
+        printf("error\n");
         return;
     }
 
@@ -558,7 +604,8 @@ void DiseaseMonitor_numCurrentPatients(DiseaseMonitorPtr diseaseMonitor, char* c
 
     // Checking the number of the arguments provided
     if(strtok(NULL," ") != NULL){
-        printf("Usage: /numCurrentPatients [disease]\n");
+        //printf("Usage: /numCurrentPatients [disease]\n");
+        printf("error\n");
         return;
     }
 
@@ -577,15 +624,13 @@ void DiseaseMonitor_numCurrentPatients(DiseaseMonitorPtr diseaseMonitor, char* c
         // Checking that the disease that the user gave(if he gave on)
         // exists in the diseaseHashTable
         if(!StaticHashTable_Exists(diseaseMonitor->diseaseHashTable, disease)){
-            printf("Disease %s does not have any outbreaks.\n", disease);
+            //printf("Disease %s does not have any outbreaks.\n", disease);
+            printf("error\n");
             return;
         }
     }
 
-    // I call the function that used at diseaseFrequency command
-    // because this command is like calling diseaseFrequency without
-    // country and the start and end date are the current date
-    StaticHashTable_diseaseFrequency(diseaseMonitor->diseaseHashTable, disease, NULL, curr_date, curr_date);
+    StaticHashTable_CurrentPatients(diseaseMonitor->diseaseHashTable, disease, curr_date);
 }
 
 // exiting the disease monitor and de-allocating all the memory

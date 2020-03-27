@@ -172,7 +172,7 @@ void RecordsBucketList_UpdateExit(BucketListPtr bucketList, char* id, Date new_d
                 Date_Copy(new_date, &(curr_bucket->bucket_records[i].record->exit_date));
 
                 // printing the confirmation message
-                printf("Changed succesfully exit date of record %s from ",id);
+                /*printf("Changed succesfully exit date of record %s from ",id);
                 if(prev_exit_date.day == -1){
                     printf("- to ");
                 } else{
@@ -187,7 +187,9 @@ void RecordsBucketList_UpdateExit(BucketListPtr bucketList, char* id, Date new_d
                     printf("%d-%d-%d.\n",curr_bucket->bucket_records[i].record->exit_date.day, 
                                         curr_bucket->bucket_records[i].record->exit_date.month,
                                         curr_bucket->bucket_records[i].record->exit_date.year);
-                }
+                }*/
+
+                printf("Record updated\n");
 
                 return;
             }

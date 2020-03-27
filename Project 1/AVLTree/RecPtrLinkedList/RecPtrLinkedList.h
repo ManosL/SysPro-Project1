@@ -10,6 +10,7 @@ void RecPtrLinkedList_Create(RecPtrLinkedListPtr*);
 int RecPtrLinkedList_Length(RecPtrLinkedListPtr);
 void RecPtrLinkedList_Insert(RecPtrLinkedListPtr,Record*);
 int RecPtrLinkedList_countryDateFrequency(RecPtrLinkedListPtr,char*,Date,Date);
+int RecPtrLinkedList_currentPatients(RecPtrLinkedListPtr, Date);
 void RecPtrLinkedList_setDiseaseHeap(RecPtrLinkedListPtr,Date,Date,MaxHeapPtr);
 void RecPtrLinkedList_setCountryHeap(RecPtrLinkedListPtr,Date,Date,MaxHeapPtr);
 void RecPtrLinkedList_Destroy(RecPtrLinkedListPtr*);

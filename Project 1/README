@@ -110,13 +110,12 @@ Section 3: Implementation of commands and initialization
     than record's entry date I change the exit date and I inform the
     user about that.
 
-    8) /numCurrentPatients: This command I handle it like /globalDiseaseStats
-    (if the user does not give a disease) and /diseaseFrequency without country
-    (if the user gave a disease) but the two dates provided are equal with the
-    current date. 
+    8) /numCurrentPatients: This command works at searching like the
+    first 2 commands (depends whether country provided or not) but the
+    patient is counted if current date is greater than patient's entry date
+    and before patient's exit date.
 
 Thanks for your time!
 
 * A patient considered recorded in [date1, date2] if patient's Entry Date
-is in [date1,date2] or ptient's Exit Date is in [date1, date2] or [date1,date2]
-is a subset of [patient's entry date, patient's exit date].
+is in [date1,date2].

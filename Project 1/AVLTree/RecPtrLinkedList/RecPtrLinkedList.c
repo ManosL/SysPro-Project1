@@ -65,10 +65,10 @@ int RecPtrLinkedList_countryDateFrequency(RecPtrLinkedListPtr listPtr, char* cou
                 if(start.day == -1){
                     frequency++;
                 }
-                else if((Date_isGreaterEqual(curr_node->record->entry_date, start) && Date_isLessEqual(curr_node->record->entry_date, end)) || 
+                else if((Date_isGreaterEqual(curr_node->record->entry_date, start) && Date_isLess(curr_node->record->entry_date, end))/* || 
                         (Date_isGreaterEqual(curr_node->record->exit_date, start) && Date_isLessEqual(curr_node->record->exit_date, end)) ||
                         ((Date_isGreater(curr_node->record->exit_date, end) || curr_node->record->exit_date.day == -1)
-                        && Date_isLess(curr_node->record->entry_date, start)))
+                        && Date_isLess(curr_node->record->entry_date, start))*/)
                 {
                     frequency++;
                 }
@@ -77,10 +77,10 @@ int RecPtrLinkedList_countryDateFrequency(RecPtrLinkedListPtr listPtr, char* cou
             if(start.day == -1){
                 frequency++;
             }
-            else if((Date_isGreaterEqual(curr_node->record->entry_date, start) && Date_isLessEqual(curr_node->record->entry_date, end)) || 
-                    (Date_isGreaterEqual(curr_node->record->exit_date, start) && Date_isLessEqual(curr_node->record->exit_date, end)) ||
+            else if((Date_isGreaterEqual(curr_node->record->entry_date, start) && Date_isLess(curr_node->record->entry_date, end)) /*|| 
+                    /*(Date_isGreaterEqual(curr_node->record->exit_date, start) && Date_isLessEqual(curr_node->record->exit_date, end)) ||
                     ((Date_isGreater(curr_node->record->exit_date, end) || curr_node->record->exit_date.day == -1)
-                        && Date_isLess(curr_node->record->entry_date, start)))
+                        && Date_isLess(curr_node->record->entry_date, start))*/)
             {
                 frequency++;
             }
@@ -92,6 +92,23 @@ int RecPtrLinkedList_countryDateFrequency(RecPtrLinkedListPtr listPtr, char* cou
     return frequency;
 }
 
+int RecPtrLinkedList_currentPatients(RecPtrLinkedListPtr listPtr, Date start){
+    int frequency = 0;
+
+    ListNode* curr_node = listPtr->head;
+
+    while(curr_node != NULL){
+        if((Date_isLessEqual(curr_node->record->entry_date, start) && (Date_isLess(start,curr_node->record->exit_date) 
+            || curr_node->record->exit_date.day == -1)))
+        {
+            frequency++;
+        }
+
+        curr_node = curr_node->next;
+    }
+
+    return frequency;
+}
 
 // Just calls the function that adds 1 to the corresponding heap element
 void RecPtrLinkedList_setDiseaseHeap(RecPtrLinkedListPtr listPtr, Date start, Date end, MaxHeapPtr heap){
@@ -101,10 +118,10 @@ void RecPtrLinkedList_setDiseaseHeap(RecPtrLinkedListPtr listPtr, Date start, Da
         if(start.day == -1){            // if we dont have date restriction
             MaxHeap_addOne(heap, curr_node->record->diseaseID);
         }
-        else if((Date_isGreaterEqual(curr_node->record->entry_date, start) && Date_isLessEqual(curr_node->record->entry_date, end)) || 
+        else if((Date_isGreaterEqual(curr_node->record->entry_date, start) && Date_isLess(curr_node->record->entry_date, end)) /*|| 
             (Date_isGreaterEqual(curr_node->record->exit_date, start) && Date_isLessEqual(curr_node->record->exit_date, end)) ||
             ((Date_isGreater(curr_node->record->exit_date, end) || curr_node->record->exit_date.day == -1)
-            && Date_isLess(curr_node->record->entry_date, start)))
+            && Date_isLess(curr_node->record->entry_date, start))*/)
         {
             MaxHeap_addOne(heap, curr_node->record->diseaseID);
         }
@@ -122,10 +139,10 @@ void RecPtrLinkedList_setCountryHeap(RecPtrLinkedListPtr listPtr, Date start, Da
         if(start.day == -1){
             MaxHeap_addOne(heap, curr_node->record->country);
         }
-        else if((Date_isGreaterEqual(curr_node->record->entry_date, start) && Date_isLessEqual(curr_node->record->entry_date, end)) || 
+        else if((Date_isGreaterEqual(curr_node->record->entry_date, start) && Date_isLess(curr_node->record->entry_date, end)) /*|| 
             (Date_isGreaterEqual(curr_node->record->exit_date, start) && Date_isLessEqual(curr_node->record->exit_date, end)) ||
             ((Date_isGreater(curr_node->record->exit_date, end) || curr_node->record->exit_date.day == -1)
-            && Date_isLess(curr_node->record->entry_date, start)))
+            && Date_isLess(curr_node->record->entry_date, start))*/)
         {
             MaxHeap_addOne(heap, curr_node->record->country);
         }

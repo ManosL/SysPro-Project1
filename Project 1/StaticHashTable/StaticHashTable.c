@@ -50,6 +50,7 @@ int StaticHashTable_Exists(StaticHashTablePtr staticHT, char* id){
 // I will apply this function to disease hash table
 void StaticHashTable_diseaseFrequency(StaticHashTablePtr staticHT,char* disease, char* country, Date start, Date end){
     // Starting printing the results of /diseaseFrequency or /globalDiseaseStats command
+    /*
     if(disease == NULL){
         printf("Global outbreaks for all countries ");
     } else{
@@ -68,6 +69,7 @@ void StaticHashTable_diseaseFrequency(StaticHashTablePtr staticHT,char* disease,
         printf("(from %d-%d-%d to %d-%d-%d)\n", start.day, start.month, start.year,
                                             end.day, end.month, end.year);
     }
+    */
 
     if(disease == NULL){
         for(int i = 0; i < staticHT->entriesNum; i++){
@@ -80,6 +82,38 @@ void StaticHashTable_diseaseFrequency(StaticHashTablePtr staticHT,char* disease,
     }
 }
 
+// I will apply this function to disease hash table
+void StaticHashTable_CurrentPatients(StaticHashTablePtr staticHT,char* disease, Date start){
+    // Starting printing the results of /diseaseFrequency or /globalDiseaseStats command
+    /*
+    if(disease == NULL){
+        printf("Global outbreaks for all countries ");
+    } else{
+        printf("%s's outbreaks for ", disease);
+
+        if(country == NULL){
+            printf("all countries ");
+        } else{
+            printf("%s ", country);
+        }
+    }
+
+
+    printf("at %d-%d-%d to %d-%d-%d\n", start.day, start.month, start.year,
+                                            end.day, end.month, end.year);
+    */
+
+    if(disease == NULL){
+        for(int i = 0; i < staticHT->entriesNum; i++){
+            BucketList_currentPatients(staticHT->entries[i], NULL, start);
+        }
+    } else{
+        int index = staticHT->hashFunction(disease) % staticHT->entriesNum;
+
+        BucketList_currentPatients(staticHT->entries[index], disease, start);
+    }
+}
+
 void StaticHashTable_printTopKDiseases(StaticHashTablePtr staticHT, int K, char* country, Date start, Date end){
     int index = staticHT->hashFunction(country) % staticHT->entriesNum;
 
@@ -89,14 +123,14 @@ void StaticHashTable_printTopKDiseases(StaticHashTablePtr staticHT, int K, char*
     
     BucketList_setDiseaseHeap(staticHT->entries[index], country, start, end, topKHeap);  // getting the configured heap
 
-    printf("Top (at most) %d diseases",K);
+    /*printf("Top (at most) %d diseases",K);
 
     if(start.day == -1){
         printf("(all time)\n\n");
     }else{
         printf("(from %d-%d-%d to %d-%d-%d)\n\n", start.day, start.month, start.year,
                                             end.day, end.month, end.year);
-    }
+    }*/
 
     MaxHeap_printTopK(topKHeap,K);      // printing top k diseases
 
@@ -114,14 +148,14 @@ void StaticHashTable_printTopKCountries(StaticHashTablePtr staticHT, int K, char
     
     BucketList_setCountryHeap(staticHT->entries[index], disease, start, end, topKHeap); // getting the configured heap
 
-    printf("Top (at most) %d diseases",K);
+    /*printf("Top (at most) %d diseases",K);
 
     if(start.day == -1){
         printf("(all time)\n\n");
     }else{
         printf("(from %d-%d-%d to %d-%d-%d)\n\n", start.day, start.month, start.year,
                                             end.day, end.month, end.year);
-    }
+    }*/
 
     MaxHeap_printTopK(topKHeap,K);  // printing top k countries
 

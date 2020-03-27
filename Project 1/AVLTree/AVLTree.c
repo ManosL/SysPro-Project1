@@ -191,6 +191,24 @@ int AVLTree_diseaseFrequency(AVLTreePtr avlPtr, char* country, Date start, Date 
     return tree_diseaseFrequency(avlPtr->root, country, start, end);
 }
 
+// helper method
+// Im gonna make an inorder traversal because inorder 
+// traverses the tree with sorted order
+int tree_currentPatients(AVLTreeNode* curr_node, Date start){
+    int result_to_add;
+
+    if(curr_node == NULL) return 0;
+
+    result_to_add = RecPtrLinkedList_currentPatients(curr_node->record_list, start);
+
+    return result_to_add + tree_currentPatients(curr_node->right_child, start) +
+            tree_currentPatients(curr_node->left_child, start);
+}
+
+int AVLTree_CurrentPatients(AVLTreePtr avlPtr, Date start){
+    return tree_currentPatients(avlPtr->root, start);
+}
+
 // Just traverses the nodes and letting the set Heap function
 // of the list do the job
 void tree_setDiseaseHeap(AVLTreeNode* curr_node, Date start, Date end, MaxHeapPtr heap){

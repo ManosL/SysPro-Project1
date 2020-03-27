@@ -348,8 +348,8 @@ void MaxHeap_printTopK(MaxHeapPtr heapPtr, int k){
 
         HeapRecord curr = MaxHeap_popMax(heapPtr);
 
-        printf("%d->%s->%d\n", i, curr.name, curr.value);
-
+        //printf("%d->%s->%d\n", i, curr.name, curr.value);
+        printf("%s %d\n", curr.name, curr.value);
         free(curr.name);
     }
 
